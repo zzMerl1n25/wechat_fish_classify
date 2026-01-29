@@ -172,6 +172,8 @@ module.exports = {
 }
 ```
 
+说明：`backend/.env` 与 `miniprogram/config.js` 为本地配置文件，默认不提交到仓库。
+
 ---
 
 ## API 接口
@@ -208,6 +210,13 @@ FastAPI（`infer_api.py`）：
   - 使用 SAM 自动裁剪主体
   - 支持阈值过滤和失败回退
 
+运行这些脚本前需要配置环境变量（或直接修改脚本内占位符）：
+
+- `PREPROCESS_IN_ROOT`、`PREPROCESS_OUT_ROOT`
+- `SPLIT_DATASET_ROOT`、`SPLIT_OUT_ROOT`
+- `SAM_SRC_ROOT`、`SAM_DST_ROOT`、`SAM_CKPT`
+- `FIND_BAD_DATA_ROOT`
+
 ### 训练脚本
 
 - `train_local_effv2m.py`：本地单卡训练
@@ -219,6 +228,10 @@ FastAPI（`infer_api.py`）：
 - `class_to_idx.json`
 - `history.json` / `hparams.json`
 - 训练曲线图和混淆矩阵
+
+训练脚本需要配置环境变量（或修改占位符）：
+
+- `TRAIN_DATA_ROOT`、`TRAIN_OUT_DIR`
 
 ### 推理一致性
 
@@ -280,4 +293,6 @@ FastAPI（`infer_api.py`）：
 ## 备注
 
 - `backend/apps/ml/infer.py` 是本地推理示例（直接加载 .pt），当前 API 路径采用 FastAPI 服务。
+- 该推理示例使用 `ML_MODEL_PATH` 环境变量指向模型文件。
+- `backend/reset_pg_password.py` 需要 `DB_HOST/DB_PORT/DB_USER/DB_PASSWORD/DB_NEW_PASSWORD` 环境变量。
 - 多处脚本内使用了占位路径（`CHANGE_ME_*`），运行前需要替换为你自己的路径/环境变量。
