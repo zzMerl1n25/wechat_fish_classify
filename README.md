@@ -1,4 +1,4 @@
-# wechat_fish_classify
+# 鱼类识别微信小程序
 
 鱼类识别微信小程序 + Django 后端 + FastAPI 推理服务 + PyTorch 训练脚本。
 
@@ -47,8 +47,6 @@ wechat_fish_classify/
     infer_api.py          FastAPI 推理服务（独立运行）
   miniprogram/            微信小程序
   CV/                     训练与数据处理脚本
-  img.png                 页面截图
-  阿里云认证.md            HTTPS 证书与 Nginx 参考
 ```
 
 ---
