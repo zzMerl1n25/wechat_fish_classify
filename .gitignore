@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs & cache
+*.log
+
+# ML / training outputs
+runs*/
+runs_*/
+*.pt
+*.pth
+*.ckpt
+*.onnx
+
+# Large media
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.zip
+*.tar
+*.tar.gz
+
+# Data (按需)
+data/
+datasets/

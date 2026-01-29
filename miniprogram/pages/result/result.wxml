@@ -1,0 +1,110 @@
+<view class="page" style="padding-top: {{safeTop}}px;">
+  <view class="nav">
+    <view class="nav-left" bindtap="onBack">返回</view>
+    <view class="nav-title">识别结果</view>
+    <view class="nav-right"></view>
+  </view>
+
+  <scroll-view class="scroll" scroll-y="true">
+    <view class="card" wx:if="{{imagePath}}">
+      <view class="card-title">图片预览</view>
+      <image class="preview" mode="aspectFit" src="{{imagePath}}"></image>
+    </view>
+
+    <view class="card" wx:if="{{pred}}">
+      <view class="card-title">模型预测</view>
+
+      <view class="kv">
+        <text class="k">Top1</text>
+        <text class="v strong">{{pred.model_label}}</text>
+      </view>
+
+      <view class="kv">
+        <text class="k">置信度</text>
+        <text class="v">{{pred.confidence_pct}}</text>
+      </view>
+
+      <view class="sub-title" wx:if="{{topkView.length}}">TopK</view>
+      <view class="topk" wx:if="{{topkView.length}}">
+        <view class="topk-row" wx:for="{{topkView}}" wx:key="class_id">
+          <view class="topk-name">{{item.class_name}}</view>
+          <view class="topk-score">{{item.confidence_pct}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card" wx:if="{{species}}">
+      <view class="card-title">物种百科（数据库）</view>
+
+      <view class="badge-row">
+        <view class="badge" wx:if="{{species.id}}">ID: {{species.id}}</view>
+        <view class="badge" wx:if="{{species.model_label}}">Label: {{species.model_label}}</view>
+      </view>
+
+      <view class="kv">
+        <text class="k">中文名</text>
+        <text class="v">{{species.name_cn}}</text>
+      </view>
+
+      <view class="kv">
+        <text class="k">英文名</text>
+        <text class="v">{{species.name_en}}</text>
+      </view>
+
+      <view class="kv">
+        <text class="k">学名</text>
+        <view class="v copyable" data-text="{{species.scientific_name}}" bindtap="onCopy">
+          <text>{{species.scientific_name}}</text>
+          <text class="copy-hint" wx:if="{{species.scientific_name}}">点此复制</text>
+        </view>
+      </view>
+
+      <view class="block">
+        <view class="block-title">别名（aliases）</view>
+        <view class="chips" wx:if="{{species.aliases && species.aliases.length}}">
+          <view class="chip" wx:for="{{species.aliases}}" wx:key="*this">{{item}}</view>
+        </view>
+        <view class="empty" wx:else>暂无</view>
+      </view>
+
+      <view class="block">
+        <view class="block-title">特征（features）</view>
+        <view class="chips" wx:if="{{species.features && species.features.length}}">
+          <view class="chip" wx:for="{{species.features}}" wx:key="*this">{{item}}</view>
+        </view>
+        <view class="empty" wx:else>暂无</view>
+      </view>
+
+      <view class="block">
+        <view class="block-title">描述（description）</view>
+        <view class="para">{{species.description}}</view>
+      </view>
+
+      <view class="block">
+        <view class="block-title">栖息地（habitat）</view>
+        <view class="para">{{species.habitat}}</view>
+      </view>
+
+      <view class="block">
+        <view class="block-title">食性（diet）</view>
+        <view class="para">{{species.diet}}</view>
+      </view>
+
+      <view class="kv">
+        <text class="k">创建时间</text>
+        <text class="v">{{species.created_at}}</text>
+      </view>
+      <view class="kv">
+        <text class="k">更新时间</text>
+        <text class="v">{{species.updated_at}}</text>
+      </view>
+    </view>
+
+    <view class="card" wx:if="{{!species}}">
+      <view class="card-title">物种百科（数据库）</view>
+      <view class="empty">数据库暂无该物种信息</view>
+    </view>
+
+    <view class="footer-space"></view>
+  </scroll-view>
+</view>

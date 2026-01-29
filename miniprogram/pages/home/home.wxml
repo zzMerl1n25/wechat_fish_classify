@@ -1,0 +1,38 @@
+<view class="page">
+  <!-- 顶部：自定义导航栏标题（含安全区） -->
+  <view class="header" style="padding-top: {{safeTop + 100}}px;">
+    <view class="title-wrap">
+      <view class="title">鱼类识别</view>
+      <view class="subtitle">拍照或上传图片进行识别</view>
+    </view>
+  </view>
+
+  <!-- 主体：居中操作区 -->
+  <view class="main">
+    <!-- 大圆拍照按钮 -->
+    <view class="shot-wrap">
+      <button class="shot-btn" bindtap="onTakePhoto" hover-class="shot-btn-hover">
+        <view class="shot-inner">
+          <view class="shot-icon">📷</view>
+          <view class="shot-text">拍照识别</view>
+        </view>
+      </button>
+    </view>
+
+    <!-- 小按钮：上传图片 -->
+    <button class="upload-btn" bindtap="onChooseImage" hover-class="upload-btn-hover">
+      <text class="upload-icon">🖼️</text>
+      <text class="upload-text">上传图片</text>
+    </button>
+
+    <!-- 提示卡片 -->
+    <view class="tips-card">
+      <view class="tip-item">• 建议在光线充足环境拍摄</view>
+      <view class="tip-item">• 尽量让鱼占画面主体</view>
+      <view class="tip-item">• 支持 JPG / PNG</view>
+    </view>
+  </view>
+
+  <!-- 底部 -->
+  <view class="footer">Powered by EfficientNetV2 · Django API</view>
+</view>
