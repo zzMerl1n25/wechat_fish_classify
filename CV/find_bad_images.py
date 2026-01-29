@@ -1,9 +1,10 @@
 # find_bad_images.py
+import os
 from pathlib import Path
 import time
 from PIL import Image
 
-DATA_ROOT = r"D:\wechat_fish_classify\CV\Image_data\WildFish++_Release_splited"
+DATA_ROOT = os.getenv("FIND_BAD_DATA_ROOT", "CHANGE_ME_FIND_BAD_DATA_ROOT")
 
 # 每处理多少张打印一次进度
 PRINT_EVERY = 200
@@ -61,6 +62,8 @@ def scan_split(split: str):
     return bad
 
 if __name__ == "__main__":
+    if "CHANGE_ME" in str(DATA_ROOT):
+        raise ValueError("请设置 FIND_BAD_DATA_ROOT 环境变量，或直接修改脚本路径。")
     all_bad = []
 
     for split in ["train", "val", "test"]:

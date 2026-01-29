@@ -17,6 +17,11 @@ Thumbs.db
 # Logs & cache
 *.log
 
+# Local config / secrets
+.env
+backend/.env
+miniprogram/config.js
+
 # ML / training outputs
 runs*/
 runs_*/
@@ -37,3 +42,6 @@ runs_*/
 # Data (按需)
 data/
 datasets/
+
+# Generated reports
+CV/bad_images.txt

@@ -1,5 +1,7 @@
+const { API_BASE } = require("./config")
+
 App({
   globalData: {
-    apiBase: "http://139.196.169.81"
+    apiBase: API_BASE
   }
 })

@@ -91,24 +91,30 @@ pip install opencv-python numpy matplotlib tqdm
 
 ### 2) 配置后端 .env
 
-Django 会读取 `backend/.env`（`config/settings/base.py`）。示例：
+Django 会读取 `backend/.env`（`config/settings/base.py`）。先复制示例文件：
+
+```
+cp backend/.env.example backend/.env
+```
+
+在 `backend/.env` 中填写你自己的配置（示例占位符）：
 
 ```
 DJANGO_ENV=dev
-DJANGO_SECRET_KEY=your-secret
+DJANGO_SECRET_KEY=CHANGE_ME_SECRET_KEY
 DJANGO_DEBUG=1
-DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
+DJANGO_ALLOWED_HOSTS=CHANGE_ME_HOSTS
 
-DB_NAME=fishdb
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_HOST=127.0.0.1
-DB_PORT=5432
+DB_NAME=CHANGE_ME_DB_NAME
+DB_USER=CHANGE_ME_DB_USER
+DB_PASSWORD=CHANGE_ME_DB_PASSWORD
+DB_HOST=CHANGE_ME_DB_HOST
+DB_PORT=CHANGE_ME_DB_PORT
 
-INFER_API_BASE=http://127.0.0.1:8000
+INFER_API_BASE=CHANGE_ME_INFER_API_BASE
 ```
 
-注意：Django 默认 INFER_API_BASE 为 `http://127.0.0.1:9000`，而 `infer_api.py` 默认运行在 8000。两端端口要统一。
+注意：`INFER_API_BASE` 必须和 `infer_api.py` 实际运行的 host/port 保持一致。
 
 ### 3) 初始化数据库
 
@@ -124,7 +130,7 @@ FishSpecies 模型定义在：`backend/apps/encyclopedia/models.py`。
 
 ```
 cd backend
-python manage.py runserver 0.0.0.0:8000
+python manage.py runserver <YOUR_HOST>:<YOUR_PORT>
 ```
 
 ### 5) 启动 FastAPI 推理服务
@@ -137,27 +143,33 @@ python infer_api.py
 或：
 
 ```
-uvicorn infer_api:app --host 127.0.0.1 --port 8000
+uvicorn infer_api:app --host <YOUR_HOST> --port <YOUR_PORT>
 ```
 
-`infer_api.py` 内需要配置：
+`infer_api.py` 通过环境变量读取配置（可在 shell 中 export）：
 
-- `RUN_DIR`：训练输出目录（含 `best_model.pt`、`class_to_idx.json`）
-- `MODEL_FILE`：推理权重文件
-- `CLASS_MAP_FILE`：类别映射文件
-- `IMG_SIZE`、`TOPK`：推理参数
+- `INFER_RUN_DIR`：训练输出目录（含 `best_model.pt`、`class_to_idx.json`）
+- `INFER_MODEL_FILE`：推理权重文件
+- `INFER_CLASS_MAP_FILE`：类别映射文件
+- `INFER_IMG_SIZE`、`INFER_TOPK`：推理参数
+- `INFER_HOST`、`INFER_PORT`：仅当你用 `python infer_api.py` 直接启动时需要
 
 ### 6) 运行小程序
 
 在微信开发者工具中导入 `miniprogram/`。
 
-修改 API 地址：
-
-- `miniprogram/app.js`
-- `miniprogram/pages/home/home.js`
+修改 API 地址（推荐方式）：
 
 ```
-const API_BASE = "http://你的后端域名或IP"
+cp miniprogram/config.example.js miniprogram/config.js
+```
+
+然后在 `miniprogram/config.js` 里填写你自己的后端地址：
+
+```
+module.exports = {
+  API_BASE: "http://<YOUR_BACKEND_HOST>:<PORT>"
+}
 ```
 
 ---
@@ -268,5 +280,4 @@ FastAPI（`infer_api.py`）：
 ## 备注
 
 - `backend/apps/ml/infer.py` 是本地推理示例（直接加载 .pt），当前 API 路径采用 FastAPI 服务。
-- 多处脚本内使用了 Windows 路径（如 `D:\wechat_fish_classify\...`），部署时需要替换为本机路径。
-
+- 多处脚本内使用了占位路径（`CHANGE_ME_*`），运行前需要替换为你自己的路径/环境变量。

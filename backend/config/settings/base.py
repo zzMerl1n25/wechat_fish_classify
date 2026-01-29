@@ -13,12 +13,9 @@ DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-INFER_API_BASE = os.getenv("INFER_API_BASE", "http://127.0.0.1:9000")
+INFER_API_BASE = os.getenv("INFER_API_BASE", "CHANGE_ME_INFER_API_BASE")
 
 ALLOWED_HOSTS = [h.strip() for h in os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",") if h.strip()]
-
-# 开发期：允许本机 + 局域网访问（真机调试）
-ALLOWED_HOSTS += ["127.0.0.1", "localhost", "172.20.10.3"]
 
 # 去重
 ALLOWED_HOSTS = list(dict.fromkeys(ALLOWED_HOSTS))
@@ -85,7 +82,7 @@ DATABASES = {
         "NAME": os.getenv("DB_NAME", "fishdb"),
         "USER": os.getenv("DB_USER", "postgres"),
         "PASSWORD": os.getenv("DB_PASSWORD", ""),
-        "HOST": os.getenv("DB_HOST", "127.0.0.1"),
+        "HOST": os.getenv("DB_HOST", "CHANGE_ME_DB_HOST"),
         "PORT": os.getenv("DB_PORT", "5432"),
     }
 }

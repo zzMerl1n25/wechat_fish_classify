@@ -1,4 +1,4 @@
-const API_BASE = "http://139.196.169.81"  // 你的 Django 地址
+const { API_BASE } = require("../../config")
 const PREDICT_URL = API_BASE + "/api/v1/predict/"
 
 Page({

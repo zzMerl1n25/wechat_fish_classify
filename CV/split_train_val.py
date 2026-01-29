@@ -1,3 +1,4 @@
+import os
 import re
 import random
 import shutil
@@ -5,8 +6,8 @@ from pathlib import Path
 from collections import defaultdict
 
 # ========= 你只需要改这里 =========
-DATASET_ROOT = Path(r"D:\wechat_fish_classify\CV\Image_data\WildFish++_Release")
-OUT_ROOT     = Path(r"/CV/Image_data/WildFish++_Release_split")
+DATASET_ROOT = Path(os.getenv("SPLIT_DATASET_ROOT", "CHANGE_ME_SPLIT_DATASET_ROOT"))
+OUT_ROOT     = Path(os.getenv("SPLIT_OUT_ROOT", "CHANGE_ME_SPLIT_OUT_ROOT"))
 # =================================
 
 SEED = 42
@@ -101,6 +102,8 @@ def copy_or_move_all(files, out_dir: Path, op):
 
 
 def main():
+    if "CHANGE_ME" in str(DATASET_ROOT) or "CHANGE_ME" in str(OUT_ROOT):
+        raise ValueError("请设置 SPLIT_DATASET_ROOT / SPLIT_OUT_ROOT 环境变量，或直接修改脚本路径。")
     assert DATASET_ROOT.exists(), f"输入目录不存在：{DATASET_ROOT}"
     safe_mkdir(OUT_ROOT)
 

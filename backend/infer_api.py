@@ -11,7 +11,7 @@ pip install fastapi uvicorn pillow torch torchvision
 运行：
 python infer_api.py
 或：
-uvicorn infer_api:app --host 127.0.0.1 --port 8000
+uvicorn infer_api:app --host <YOUR_HOST> --port <YOUR_PORT>
 """
 
 import os
@@ -36,16 +36,16 @@ from fastapi.responses import JSONResponse
 # =========================
 # 你需要改的路径（指向训练输出目录）
 # =========================
-RUN_DIR = r"D:/wechat_fish_classify/CV/runs/effv2s_run03"
-MODEL_FILE = "best_model.pt"          # 或 "last_model.pt"
-CLASS_MAP_FILE = "class_to_idx.json"
+RUN_DIR = os.getenv("INFER_RUN_DIR", "").strip()
+MODEL_FILE = os.getenv("INFER_MODEL_FILE", "best_model.pt")
+CLASS_MAP_FILE = os.getenv("INFER_CLASS_MAP_FILE", "class_to_idx.json")
 
-IMG_SIZE = 224
-TOPK = 5
+IMG_SIZE = int(os.getenv("INFER_IMG_SIZE", "224"))
+TOPK = int(os.getenv("INFER_TOPK", "5"))
 
-# 端口先空着：你后面接前端再填/或直接用 uvicorn 命令启动
-HOST = ""
-PORT = ""
+# 端口交给环境变量（或用 uvicorn 命令传入）
+HOST = os.getenv("INFER_HOST", "").strip()
+PORT = os.getenv("INFER_PORT", "").strip()
 
 # 是否保存上传图片（方便你排查/做历史）
 SAVE_INPUT_IMAGE = True
@@ -157,6 +157,9 @@ def predict_topk(model, img: Image.Image, tfm, idx_to_class: Dict[int, str],
 # FastAPI + 简单“结果存储”（内存 + 可选落盘）
 # =========================
 app = FastAPI(title="Fish Classifier API", version="1.0")
+
+if not RUN_DIR:
+    raise ValueError("INFER_RUN_DIR 为空，请在环境变量中设置模型运行目录。")
 
 RUN_DIR_PATH = Path(RUN_DIR)
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -273,5 +276,4 @@ if __name__ == "__main__":
     if HOST and PORT:
         uvicorn.run("infer_api:app", host=HOST, port=int(PORT), reload=False)
     else:
-        print("[INFO] HOST/PORT 为空：先用默认本机启动（用于测试）")
-        uvicorn.run("infer_api:app", host="127.0.0.1", port=8000, reload=False)
+        raise ValueError("INFER_HOST/INFER_PORT 为空，请设置环境变量或用 uvicorn 指定。")

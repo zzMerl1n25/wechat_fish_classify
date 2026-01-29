@@ -36,8 +36,8 @@ from PIL import Image
 # =========================================================
 
 # 数据与输出
-DATA_ROOT = r"D:\wechat_fish_classify\CV\Image_data\WildFish++_Release_split"
-OUT_DIR   = r"D:\wechat_fish_classify\CV\runs\effv2s_run03"
+DATA_ROOT = os.getenv("TRAIN_DATA_ROOT", "CHANGE_ME_TRAIN_DATA_ROOT")
+OUT_DIR   = os.getenv("TRAIN_OUT_DIR", "CHANGE_ME_TRAIN_OUT_DIR")
 
 # 输入尺寸
 IMG_SIZE = 224
@@ -606,6 +606,8 @@ def save_curves(history: dict, out_dir: Path):
 
 
 def main():
+    if "CHANGE_ME" in str(DATA_ROOT) or "CHANGE_ME" in str(OUT_DIR):
+        raise ValueError("请设置 TRAIN_DATA_ROOT / TRAIN_OUT_DIR 环境变量，或直接修改脚本路径。")
     seed_everything(SEED)
 
     data_root = Path(DATA_ROOT)

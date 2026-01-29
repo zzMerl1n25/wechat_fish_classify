@@ -1,3 +1,4 @@
+import os
 import time
 import random
 from pathlib import Path
@@ -10,8 +11,8 @@ from PIL import Image
 
 
 # ===================== 你只需要改这里 =====================
-IN_ROOT  = Path(r"D:\wechat_fish_classify\CV\Image_data\WildFish++_Release")
-OUT_ROOT = Path(r"D:\wechat_fish_classify\CV\Image_data\WildFish++_preprocessed")
+IN_ROOT  = Path(os.getenv("PREPROCESS_IN_ROOT", "CHANGE_ME_PREPROCESS_IN_ROOT"))
+OUT_ROOT = Path(os.getenv("PREPROCESS_OUT_ROOT", "CHANGE_ME_PREPROCESS_OUT_ROOT"))
 
 OUT_SIZE = 384
 
@@ -261,6 +262,8 @@ def worker_process_one_image(task):
 
 
 def main():
+    if "CHANGE_ME" in str(IN_ROOT) or "CHANGE_ME" in str(OUT_ROOT):
+        raise ValueError("请设置 PREPROCESS_IN_ROOT / PREPROCESS_OUT_ROOT 环境变量，或直接修改脚本路径。")
     assert IN_ROOT.exists(), f"输入目录不存在：{IN_ROOT}"
     OUT_ROOT.mkdir(parents=True, exist_ok=True)
 

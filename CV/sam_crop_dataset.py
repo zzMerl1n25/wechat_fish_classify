@@ -1,4 +1,5 @@
 # sam_crop_dataset.py
+import os
 import csv
 from pathlib import Path
 
@@ -9,9 +10,9 @@ from tqdm import tqdm
 from segment_anything import sam_model_registry, SamAutomaticMaskGenerator
 
 # ====== 你需要改的 3 个路径 ======
-SRC_ROOT = r"D:\wechat_fish_classify\CV\Image_data\WildFish++_Release_split"         # 原始分类数据集根目录（含 train/val/test）
-DST_ROOT = r"D:\wechat_fish_classify\CV\Image_data\WildFish++_Release_split_CROP"   # 输出裁剪版数据集根目录
-SAM_CKPT  = r"D:\wechat_fish_classify\CV\sam\sam_vit_b_01ec64.pth"                                # SAM 权重文件
+SRC_ROOT = os.getenv("SAM_SRC_ROOT", "CHANGE_ME_SAM_SRC_ROOT")         # 原始分类数据集根目录（含 train/val/test）
+DST_ROOT = os.getenv("SAM_DST_ROOT", "CHANGE_ME_SAM_DST_ROOT")         # 输出裁剪版数据集根目录
+SAM_CKPT  = os.getenv("SAM_CKPT", "CHANGE_ME_SAM_CKPT")                # SAM 权重文件
 MODEL_TYPE = "vit_b"  # vit_b / vit_l / vit_h
 
 # ====== 一些稳健性参数（你这种“一鱼很大”通常默认就够） ======
@@ -204,4 +205,6 @@ def main():
     print("Report saved:", report_path)
 
 if __name__ == "__main__":
+    if ("CHANGE_ME" in str(SRC_ROOT)) or ("CHANGE_ME" in str(DST_ROOT)) or ("CHANGE_ME" in str(SAM_CKPT)):
+        raise ValueError("请设置 SAM_SRC_ROOT / SAM_DST_ROOT / SAM_CKPT 环境变量，或直接修改脚本路径。")
     main()

@@ -1,9 +1,10 @@
+import os
 import torch
 from PIL import Image
 from torchvision import transforms
 
 # 你需要把这些路径/类别映射换成你自己的
-MODEL_PATH = r"D:\wechat_fish_classify\CV\runs\best_model.pt"
+MODEL_PATH = os.getenv("ML_MODEL_PATH", "").strip()
 
 # 例子：idx -> model_label（你训练时的类别顺序）
 IDX_TO_LABEL = [
@@ -23,6 +24,8 @@ _preprocess = transforms.Compose([
 def get_model():
     global _model
     if _model is None:
+        if not MODEL_PATH:
+            raise ValueError("ML_MODEL_PATH 为空，请设置环境变量或在代码中填写模型路径。")
         m = torch.jit.load(MODEL_PATH, map_location=_device) if MODEL_PATH.endswith(".pt") else torch.load(MODEL_PATH, map_location=_device)
         # 如果你保存的是 state_dict，需要自己构建网络再 load_state_dict
         m.eval()
